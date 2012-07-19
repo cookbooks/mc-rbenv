@@ -23,20 +23,8 @@ search(:users, "*:*") do |u|
     action :create
   end
   
-  directory "#{rbenv_dir}/plugins" do
-    owner rbenv_user
-    group "sysadmin"
-    mode "0755"
-    action :create
-  end
-  
   git rbenv_dir do
     repository "git://github.com/sstephenson/rbenv.git"
-    action :sync
-  end
-  
-  git "#{rbenv_dir}/plugins" do
-    repository "git://github.com/sstephenson/ruby-build.git"
     action :sync
   end
   
@@ -65,14 +53,6 @@ search(:users, "*:*") do |u|
     code <<-EOH
     source .profile
     exec $SHELL
-    EOH
-  end
-  
-  bash "install rubies" do
-    user rbenv_user
-    cwd rbenv_dir
-    code <<-EOH
-    rbenv install #{rubies}
     EOH
   end
   
