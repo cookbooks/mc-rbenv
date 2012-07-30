@@ -1,5 +1,23 @@
-if [ -d "$HOME/profile.d" ] ; then
-  for file in $HOME/profile.d/* ; do
-    . $file
-  done
+FTPMODE=auto
+MAIL=/usr/mail/${LOGNAME:?}
+MANPATH=/opt/local/man:/usr/share/man
+PAGER=less
+PATH=/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin
+export FTPMODE MAIL MANPATH PAGER PATH
+
+# help ncurses programs determine terminal size
+export COLUMNS LINES
+
+HOSTNAME=`/usr/bin/hostname`
+HISTSIZE=1000
+
+if [[ -d $HOME/.rbenv ]]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
 fi
+
+# if [ -d "$HOME/profile.d" ] ; then
+#   for file in $HOME/profile.d/* ; do
+#     . $file
+#   done
+# fi
