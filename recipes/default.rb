@@ -34,30 +34,28 @@ search(:users, "ruby:*") do |u|
     action :create
   end
   
-  directory "#{rbenv_user_dir}/profile.d" do
+  # directory "#{rbenv_user_dir}/profile.d" do
+  #     owner rbenv_user
+  #     action :create
+  #   end
+  #   
+  #   cookbook_file "#{rbenv_user_dir}/profile.d/rbenv" do
+  #     owner rbenv_user
+  #     mode '0700'
+  #     source "rbenv"
+  #     action :create
+  #   end
+  
+  directory "#{rbenv_user_dir}/.rbenv/plugins" do
     owner rbenv_user
     action :create
   end
   
-  cookbook_file "#{rbenv_user_dir}/profile.d/rbenv" do
-    owner rbenv_user
-    mode '0700'
-    source "rbenv"
-    action :create
-  end
-  
-  directory "#{rbenv_dir}/plugins" do
-    owner rbenv_user
-    action :create
-  end
-  
-  git "#{rbenv_dir}/plugins/ruby-build" do
+  git "#{rbenv_user_dir}/.rbenv/plugins/ruby-build" do
     user rbenv_user
     repository "git://github.com/sstephenson/ruby-build.git"
     action :sync
   end
-  
-  
   
   rubies.each do |ruby|
   bash "install rubies" do
@@ -67,9 +65,18 @@ search(:users, "ruby:*") do |u|
     export HOME=#{rbenv_user_dir}
     export TMPDIR=#{rbenv_user_dir}
     source .profile
+    # first check /modpkg/ruby if version exists
+    # if true, copy ruby from NFS
+    # else install
+    # then copy new install to NFS
     if [ "`rbenv versions | grep #{ruby}`" ];
-    then echo "#{ruby} already installed";
-    else rbenv install #{ruby};
+      then echo "#{ruby} already installed";
+    elif [ -f /modpkg/ruby/smartos-base64-1.7.1/#{ruby}.tar.gz ];
+      then echo "copying ruby from modpkg..."  &&  tar -xzvf /modpkg/ruby/smartos-base64-1.7.1/#{ruby}.tar.gz -C .rbenv/versions/;
+    else
+      # make sure to create os/version folder for ruby
+      [  -d /modpkg/ruby/smartos-base64-1.7.1/ ] || echo "creating pkg directory on nfs share..." && mkdir -p /modpkg/ruby/smartos-base64-1.7.1
+      echo "installing ruby from source..." && rbenv install #{ruby} && echo "creating tar file" && tar -czvf /modpkg/ruby/smartos-base64-1.7.1/1.9.3-p194.tar.gz .rbenv/versions/1.9.3-p194;
     fi
     rbenv rehash;
     EOH
