@@ -83,6 +83,7 @@ search(:users, "ruby:*") do |u|
         source .profile
         echo "installing ruby from source..." && \
         rbenv install #{ruby} && echo "creating tar file" && cd .rbenv/versions/ && \
+        mkdir -p /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user} && \
         tar -czf /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user}/1.9.3-p194.tar.gz 1.9.3-p194;
       fi
       rbenv rehash
