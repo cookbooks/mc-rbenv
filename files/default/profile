@@ -10,7 +10,7 @@ export COLUMNS LINES
 
 HOSTNAME=`/usr/bin/hostname`
 HISTSIZE=1000
-
+export C_INCLUDE_PATH=/opt/local/include
 if [[ -d $HOME/.rbenv ]]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
