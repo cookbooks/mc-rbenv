@@ -67,6 +67,9 @@ search(:users, "ruby:*") do |u|
       export TMPDIR=#{rbenv_user_dir}
       export PREFIX=#{rbenv_user_dir}/.rbenv/versions/#{ruby}
       export CONFIGURE_OPTS='--with-opt-dir=/opt/local/lib'
+
+      # ruby compile flags to link correctly for smartos
+      export LDFLAGS="-R/opt/local/lib -L/opt/local/lib -L/opt/local/lib/"
       # first check /modpkg/ruby if version exists
       # if true, copy ruby from NFS
       # else install
@@ -87,7 +90,7 @@ search(:users, "ruby:*") do |u|
         tar -czf /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user}/1.9.3-p194.tar.gz 1.9.3-p194;
       fi
       rbenv rehash
-      rbenv local #{ruby}
+      rbenv global #{ruby}
       if  rbenv which bundle; then
         echo 'bundler already installed'
       else
