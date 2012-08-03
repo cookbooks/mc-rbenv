@@ -66,7 +66,7 @@ search(:users, "ruby:*") do |u|
       export HOME=#{rbenv_user_dir}
       export TMPDIR=#{rbenv_user_dir}
       export PREFIX=#{rbenv_user_dir}/.rbenv/versions/#{ruby}
-    
+      export CONFIGURE_OPTS='--with-opt-dir=/opt/local/lib'
       # first check /modpkg/ruby if version exists
       # if true, copy ruby from NFS
       # else install
