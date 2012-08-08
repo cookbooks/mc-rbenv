@@ -1,3 +1,4 @@
+export LANG=en_US.UTF-8
 if [ "$PS1" ]; then
   shopt -s checkwinsize cdspell extglob histappend
   alias ll='ls -lF'
