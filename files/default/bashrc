@@ -1,0 +1,18 @@
+if [ "$PS1" ]; then
+  shopt -s checkwinsize cdspell extglob histappend
+  alias ll='ls -lF'
+  HISTCONTROL=ignoreboth
+  HISTIGNORE="[bf]g:exit:quit"
+  PS1="[\u@\h \w]\\$ "
+  if [ -n "$SSH_CLIENT" ]; then
+    PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%\.*} \007" && history -a'
+  fi
+fi
+
+export C_INCLUDE_PATH=/opt/local/include
+export LIBRARY_PATH=/opt/local/lib:/lib/secure/64:/usr/lib/secure/64:/opt/local/gcc47/lib/amd64
+
+if [[ -d $HOME/.rbenv ]]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
