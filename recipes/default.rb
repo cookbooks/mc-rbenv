@@ -60,7 +60,7 @@ search(:users, "ruby:*") do |u|
       export PREFIX=#{rbenv_user_dir}/.rbenv/versions/#{ruby}
       export CONFIGURE_OPTS='--with-opt-dir=/opt/local/lib'
       # ruby compile flags to link correctly for smartos
-      export LDFLAGS="-R/opt/local/lib -L/opt/local/lib -L/opt/local/lib/"
+      export LDFLAGS="-R/opt/local -L/opt/local/lib "
       
       source .bashrc
       
