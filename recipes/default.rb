@@ -49,7 +49,7 @@ search(:users, "ruby:*") do |u|
     repository "git://github.com/sstephenson/ruby-build.git"
     action :sync
   end
-  
+
   rubies.each do |ruby|
     bash "install rubies" do
       user rbenv_user
@@ -71,7 +71,7 @@ search(:users, "ruby:*") do |u|
       if [ "`rbenv versions | grep #{ruby}`" ];
         then echo "#{ruby} already installed";
       elif [ -f /ruby/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz ];
-        then echo "copying ruby from modpkg NFS share..." && mkdir -p  $HOME/.rbenv/versions &&  \
+        then echo "copying ruby from modpkg LOCAL share..." && mkdir -p  $HOME/.rbenv/versions &&  \
         tar -xzf /ruby/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz -C $HOME/.rbenv/versions
       else
         # make sure to create os/version folder for ruby
