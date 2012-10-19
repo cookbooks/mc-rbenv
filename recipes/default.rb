@@ -50,7 +50,7 @@ search(:users, node['rbenv']['users_query']) do |u|
     repository "git://github.com/sstephenson/ruby-build.git"
     action :sync
   end
-  
+
   rubies.each do |ruby|
     bash "install rubies" do
       user rbenv_user
@@ -59,9 +59,9 @@ search(:users, node['rbenv']['users_query']) do |u|
       export HOME=#{rbenv_user_dir}
       export TMPDIR=#{rbenv_user_dir}
       export PREFIX=#{rbenv_user_dir}/.rbenv/versions/#{ruby}
-      export CONFIGURE_OPTS='--with-opt-dir=/opt/local/lib'
+      export CONFIGURE_OPTS='--with-opt-dir=/opt/local'
       # ruby compile flags to link correctly for smartos
-      export LDFLAGS="-R/opt/local/lib -L/opt/local/lib -L/opt/local/lib/"
+      export LDFLAGS="-R/opt/local -L/opt/local/lib "
       
       source .bashrc
       
@@ -71,16 +71,16 @@ search(:users, node['rbenv']['users_query']) do |u|
       # then copy new install to NFS
       if [ "`rbenv versions | grep #{ruby}`" ];
         then echo "#{ruby} already installed";
-      elif [ -f /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz ];
-        then echo "copying ruby from modpkg NFS share..." && mkdir -p  $HOME/.rbenv/versions &&  \
-        tar -xzf /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz -C $HOME/.rbenv/versions
+      elif [ -f /ruby/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz ];
+        then echo "copying ruby from modpkg LOCAL share..." && mkdir -p  $HOME/.rbenv/versions &&  \
+        tar -xzf /ruby/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz -C $HOME/.rbenv/versions
       else
         # make sure to create os/version folder for ruby
-        [  -d /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user} ] || echo "creating pkg directory on nfs share..." && mkdir -p /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user}
+        [  -d /ruby/smartos-base64-1.7.1/#{rbenv_user} ] || echo "creating pkg directory on nfs share..." && mkdir -p /ruby/smartos-base64-1.7.1/#{rbenv_user}
         echo "installing ruby from source..." && \
         rbenv install #{ruby} && echo "creating tar file" && cd .rbenv/versions/ && \
-        mkdir -p /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user} && \
-        tar -czf /modpkg/ruby/smartos-base64-1.7.1/#{rbenv_user}/1.9.3-p194.tar.gz 1.9.3-p194;
+        mkdir -p /ruby/smartos-base64-1.7.1/#{rbenv_user} && \
+        tar -czf /ruby/smartos-base64-1.7.1/#{rbenv_user}/1.9.3-p194.tar.gz 1.9.3-p194;
       fi
       rbenv rehash
       rbenv global #{ruby}
