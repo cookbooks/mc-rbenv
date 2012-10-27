@@ -13,10 +13,11 @@ search(:users, "ruby:*") do |u|
   rbenv_user_dir = "/home/#{rbenv_user}"
   rubies = u['ruby']
   rbenv_dir = "#{rbenv_user_dir}/.rbenv"
- bash "change permisions" do
-    code <<-EOH
-     chown -R #{rbenv_user}:#{rbenv_user} #{rbenv_user_dir}
-    EOH
+  
+  bash "change permisions" do
+      code <<-EOH
+       chown -R #{rbenv_user}:#{rbenv_user} #{rbenv_user_dir}
+      EOH
   end
 
   git rbenv_dir do
@@ -24,13 +25,21 @@ search(:users, "ruby:*") do |u|
     repository "git://github.com/sstephenson/rbenv.git"
     action :sync
   end
+
  
   cookbook_file "#{rbenv_user_dir}/.bashrc" do
     owner rbenv_user
-    mode '0700'
+    mode '0744'
     source "bashrc"
     action :create
   end
+  cookbook_file "#{rbenv_user_dir}/.bash_profile" do
+     owner rbenv_user
+     mode '0744'
+     source "bashrc"
+     action :create
+   end
+  
   
 
   
@@ -60,7 +69,7 @@ search(:users, "ruby:*") do |u|
        export CONFIGURE_OPTS='--with-opt-dir=/opt/local'
        # ruby compile flags to link correctly for smartos
        export LDFLAGS="-R/opt/local -L/opt/local/lib "
-       sleep 20       
+       #sleep 20       
        source .bashrc
        
        # first check /modpkg/ruby if version exists

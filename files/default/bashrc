@@ -1,3 +1,21 @@
+TPMODE=auto
+MAIL=/usr/mail/${LOGNAME:?}
+MANPATH=/opt/local/gcc47/man:/opt/local/java/sun6/man:/opt/local/lib/perl5/man:/opt/local/lib/perl5/vendor_perl/man:/opt/local/gnu/man:/opt/local/man:/usr/share/man
+PAGER=less
+PATH=/opt/local/gnu/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin
+
+export FTPMODE MAIL MANPATH PAGER PATH
+
+# hook man with groff properly
+if [ -x /opt/local/bin/groff ]; then
+  alias man='TROFF="groff -T ascii" TCAT="cat" PAGER="less -is" /usr/bin/man -T -mandoc'
+fi
+
+# help ncurses programs determine terminal size
+export COLUMNS LINES
+
+HOSTNAME=`/usr/bin/hostname`
+HISTSIZE=1000
 export LANG=en_US.UTF-8
 if [ "$PS1" ]; then
   shopt -s checkwinsize cdspell extglob histappend
@@ -13,7 +31,9 @@ fi
 export C_INCLUDE_PATH=/opt/local/include
 export LIBRARY_PATH=/opt/local/lib:/lib/secure/64:/usr/lib/secure/64:/opt/local/gcc47/lib/amd64
 
+
 if [[ -d $HOME/.rbenv ]]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
+  rbenv init - &>/dev/null
   eval "$(rbenv init -)"
 fi
