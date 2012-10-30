@@ -7,8 +7,9 @@
 # All rights reserved - Do Not Redistribute
 #
 
-# traverse users in data bag and see if they set a ruby attribute and install rubies
-search(:users, "ruby:*") do |u|
+# traverse users in data bag and see if they set a ruby attribute
+# (or some other query) and install rubies
+search(:users, node['rbenv']['users_query']) do |u|
   rbenv_user = u['id']
   rbenv_user_dir = "/home/#{rbenv_user}"
   rubies = u['ruby']
