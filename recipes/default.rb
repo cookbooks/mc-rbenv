@@ -61,12 +61,6 @@ search(:users, node['rbenv']['users_query']) do |u|
     action :sync
   end
 
-  bash "change permisions" do
-    code <<-EOH
-     chown -R ecomm:ecomm /home/ecomm
-    EOH
-  end
-
   rubies.each do |ruby|
     bash "install rubies" do
       user rbenv_user
