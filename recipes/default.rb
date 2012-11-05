@@ -27,18 +27,27 @@ search(:users, node['rbenv']['users_query']) do |u|
     action :sync
   end
 
-  cookbook_file "#{rbenv_user_dir}/.bashrc" do
-    owner rbenv_user
-    mode '0744'
-    source "bashrc"
-    action :create
-  end
+  if node['rbenv']['bash_env_file']
+    cookbook_file "#{node['rbenv']['bash_env_file']}" do
+      owner rbenv_user
+      mode 0644
+      source 'bash_env'
+      action :create
+    end
+  else
+    cookbook_file "#{rbenv_user_dir}/.bashrc" do
+      owner rbenv_user
+      mode '0744'
+      source "bashrc"
+      action :create
+    end
 
-  cookbook_file "#{rbenv_user_dir}/.bash_profile" do
-    owner rbenv_user
-    mode '0744'
-    source "bashrc"
-    action :create
+    cookbook_file "#{rbenv_user_dir}/.bash_profile" do
+      owner rbenv_user
+      mode '0744'
+      source "bashrc"
+      action :create
+    end
   end
 
   directory "#{rbenv_user_dir}/.rbenv/plugins" do
