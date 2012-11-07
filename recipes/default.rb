@@ -10,7 +10,7 @@
 # traverse users in data bag and see if they set a ruby attribute
 # (or some other query) and install rubies
 search(:users, node['rbenv']['users_query']) do |u|
-  rbenv_user = u['id']
+  rbenv_user = u['username'] ||= u['id']
   rbenv_user_dir = "/home/#{rbenv_user}"
   rubies = u['ruby']
   rbenv_dir = "#{rbenv_user_dir}/.rbenv"
