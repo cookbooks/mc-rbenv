@@ -83,7 +83,6 @@ search(:users, node['rbenv']['users_query']) do |u|
           then echo "#{ruby} already installed";
           echo > /tmp/ruby_installed
         elif [ -f $HOME/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz ];
-         #elif [ -f /home/ecomm/smartos-base64-1.7.1/ecomm/1.9.3-p194.tar.gz ];
           then echo "copying ruby from LOCAL directory..." > /tmp/copy && mkdir -p  $HOME/.rbenv/versions &&  \
           tar -xzf $HOME/smartos-base64-1.7.1/#{rbenv_user}/#{ruby}.tar.gz -C $HOME/.rbenv/versions
         else
